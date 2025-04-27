@@ -6,7 +6,7 @@ export default function Posts() {
 
     useEffect(() => {
         const getUser = async () => {
-            const response = await fetch(`/api/auth/user`, {
+            const response = await fetch(`/api/user`, {
                 method: 'GET',
                 mode: 'cors',
                 headers: {

@@ -6,7 +6,7 @@ function CreatePost() {
 
   useEffect(() => {
     const getUser = async () => {
-      const response = await fetch(`/api/auth/username`, {
+      const response = await fetch(`/api/username`, {
         method: 'GET',
         mode: 'cors',
         headers: {

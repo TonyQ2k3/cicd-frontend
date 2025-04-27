@@ -11,7 +11,7 @@ function NavBar() {
 
   useEffect(() => {
       const getUser = async () => {
-          const response = await fetch(`/api/auth/username`, {
+          const response = await fetch(`/api/username`, {
               method: 'GET',
               mode: 'cors',
               headers: {
@@ -27,7 +27,7 @@ function NavBar() {
   }, []);
 
   const handleSignOut = async () => {
-    const response = await fetch(`/api/auth/logout`, {
+    const response = await fetch(`/api/logout`, {
       method: 'POST',
       mode: 'cors',
       headers: {

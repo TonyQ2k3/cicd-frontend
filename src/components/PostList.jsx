@@ -8,7 +8,7 @@ export default function PostList() {
     useEffect(() => {
         const getPosts = async() => {
             try {
-                const response = await fetch(`/api/posts/all`, {
+                const response = await fetch(`/api/posts/all/`, {
                     method: 'GET',
                     mode: 'cors',
                     headers: {

@@ -20,7 +20,7 @@ export default function CreateComment({ postId, username }) {
         };
         console.log(comment);
 
-        const res = await fetch(`/api/comments/`, {
+        const res = await fetch(`/api/comments`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
