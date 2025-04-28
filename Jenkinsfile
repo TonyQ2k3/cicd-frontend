@@ -5,6 +5,10 @@ pipeline {
             args '-u root:root' // Run as root user to avoid permission issues}
         }
     }
+    
+    triggers {
+        pollSCM('* * * * *') // Check for changes every minute
+    }
 
     stages {
         stage('Clone Repository') {
