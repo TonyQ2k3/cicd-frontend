@@ -5,28 +5,36 @@ pipeline {
             args '-u root:root' // Run as root user to avoid permission issues}
         }
     }
-    
-    triggers {
-        pollSCM('* * * * *') // Check for changes every minute
-    }
 
     stages {
         stage('Clone Repository') {
+            when {
+                changeset "**/src/**"
+            }
             steps {
                 checkout scm
             }
         }    
         stage('Install Dependencies') {
+            when {
+                changeset "**/src/**"
+            }
             steps {
                 sh 'npm ci'
             }
         }
         stage('Build') {
+            when {
+                changeset "**/src/**"
+            }
             steps {
                 sh 'npm run build --if-present'
             }
         }
         stage('Run Tests') {
+            when {
+                changeset "**/src/**"
+            }
             steps {
                 sh 'npm test -- --watchAll=false'
             }
