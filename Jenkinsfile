@@ -11,11 +11,12 @@ pipeline {
             agent {
                 docker {
                     image 'sonarsource/sonar-scanner-cli:11.3'
+                    args '-u root:root'
                 }
             }
             steps {
                 checkout scm
-                
+
                 sh '''
                 sonar-scanner \
                   -Dsonar.projectKey=front-end \
