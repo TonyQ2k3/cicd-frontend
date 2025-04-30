@@ -7,63 +7,42 @@ pipeline {
     }
 
     stages {
-        agent {
-            docker {
-                image 'sonarsource/sonar-scanner-cli:11.3'
-            }
-        }
         stage('SonarQube Analysis') {
+            agent {
+                docker {
+                    image 'sonarsource/sonar-scanner-cli:11.3'
+                }
+            }
             steps {
                 checkout scm
             }
             steps {
                 sh '''
                 sonar-scanner \
-                  -Dsonar.projectKey=my-node-app \
+                  -Dsonar.projectKey=front-end \
                   -Dsonar.sources=. \
                 '''
             }
         }
-    }
-    stages {
-        agent {
-            docker { 
-                image 'node:23-alpine3.20' 
-                args '-u root:root'
+
+        stage('Unit Tests') {
+            agent {
+                docker { 
+                    image 'node:23-alpine3.20' 
+                    args '-u root:root'
+                }
             }
-        }
-        stage('Clone Repository') {
             when {
                 changeset "**/src/**"
             }
             steps {
                 checkout scm
             }
-        }    
-        stage('Install Dependencies') {
-            when {
-                changeset "**/src/**"
-            }
             steps {
                 sh 'npm ci'
-            }
-        }
-        stage('Build') {
-            when {
-                changeset "**/src/**"
-            }
-            steps {
-                sh 'npm run build --if-present'
-            }
-        }
-        stage('Run Tests') {
-            when {
-                changeset "**/src/**"
-            }
-            steps {
                 sh 'npm test -- --watchAll=false'
             }
-        }
+        }    
     }
 
     post {
