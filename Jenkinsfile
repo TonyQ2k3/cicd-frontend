@@ -1,12 +1,37 @@
 pipeline {
-    agent {
-        docker { 
-            image 'node:23-alpine3.20' 
-            args '-u root:root' // Run as root user to avoid permission issues}
-        }
+    agent none
+
+    environment {
+        DOCKERHUB_CREDENTIALS_ID = 'dockerhub-credentials'
+        DOCKER_IMAGE = 'yourdockerhubusername/your-app'
     }
 
     stages {
+        agent {
+            docker {
+                image 'sonarsource/sonar-scanner-cli:11.3'
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                checkout scm
+            }
+            steps {
+                sh '''
+                sonar-scanner \
+                  -Dsonar.projectKey=my-node-app \
+                  -Dsonar.sources=. \
+                '''
+            }
+        }
+    }
+    stages {
+        agent {
+            docker { 
+                image 'node:23-alpine3.20' 
+                args '-u root:root'
+            }
+        }
         stage('Clone Repository') {
             when {
                 changeset "**/src/**"
