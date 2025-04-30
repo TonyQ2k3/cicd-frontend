@@ -15,8 +15,7 @@ pipeline {
             }
             steps {
                 checkout scm
-            }
-            steps {
+                
                 sh '''
                 sonar-scanner \
                   -Dsonar.projectKey=front-end \
