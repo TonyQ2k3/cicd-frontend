@@ -37,8 +37,6 @@ pipeline {
             }
             steps {
                 checkout scm
-            }
-            steps {
                 sh 'npm ci'
                 sh 'npm test -- --watchAll=false'
             }
