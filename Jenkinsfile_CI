@@ -52,6 +52,7 @@ pipeline {
                 checkout scm
 
                 script {
+                    git config --global --add safe.directory /var/lib/jenkins/workspace/ci-frontend
                     def commitHash = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
                     sh "docker build -t ${DOCKER_IMAGE}:test-${commitHash} ."
                 }
