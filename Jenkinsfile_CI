@@ -42,8 +42,11 @@ pipeline {
             agent {
                 docker { 
                     image 'docker:dind' 
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                    args '-u root'
                 }
+            }
+            environment {
+                HOME = "${env.WORKSPACE}"
             }
             steps {
                 checkout scm
