@@ -2,20 +2,9 @@ pipeline {
     agent {
         docker {
             image 'alpine/git'  // You can also use 'node:18' if you need Node tools
-            args '-v /etc/passwd:/etc/passwd:ro'  // optional if you're binding user info
         }
     }
 
-    environment {
-        GIT_CREDENTIALS_ID = 'git-credentials-id' // Jenkins credentials ID
-        DOCKER_IMAGE = 'yourdockerhubusername/your-app'
-        USERNAME = 'jenkins' // Jenkins user name
-        EMAIL = ''
-    }
-
-    parameters {
-        string(name: 'BUILD_NUMBER', defaultValue: '', description: 'CI build number / image tag')
-    }
 
     stages {
         stage('Checkout Repo') {
@@ -27,29 +16,17 @@ pipeline {
         stage('Update Kubernetes Manifest') {
             steps {
                 script {
-                    def imageTag = "${DOCKER_IMAGE}:${params.BUILD_NUMBER}"
-                    def deploymentFile = 'k8s/deployment.yaml'
 
-                    sh """
-                    sed -i 's|image: ${DOCKER_IMAGE}:.*|image: ${imageTag}|' ${deploymentFile}
-                    """
+                    sh "hello world"
                 }
             }
         }
 
         stage('Commit and Push Changes') {
             steps {
-                withCredentials([usernamePassword(credentialsId: "${GIT_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
-                    sh '''
-                    git config user.email ${EMAIL}
-                    git config user.name ${USERNAME}
+                script {
 
-                    git add k8s/frontend.yaml
-                    git commit -m "Update image to ${DOCKER_IMAGE}:${BUILD_NUMBER}" || echo "Updated image to ${DOCKER_IMAGE}:${BUILD_NUMBER}"
-
-                    repo_url=$(git config --get remote.origin.url | sed 's|https://||')
-                    git push https://${GIT_USER}:${GIT_PASS}@$repo_url
-                    '''
+                    sh "hello world"
                 }
             }
         }
