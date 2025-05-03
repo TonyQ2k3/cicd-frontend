@@ -1,7 +1,8 @@
 pipeline {
     agent {
-        docker {
-            image 'alpine/git'  // You can also use 'node:18' if you need Node tools
+        docker { 
+            image 'node:23-alpine3.20' 
+            args '-u root:root'
         }
     }
 
@@ -17,7 +18,7 @@ pipeline {
             steps {
                 script {
 
-                    sh "hello world"
+                    sh "echo hello world"
                 }
             }
         }
@@ -25,8 +26,7 @@ pipeline {
         stage('Commit and Push Changes') {
             steps {
                 script {
-
-                    sh "hello world"
+                    sh "echo hello world"
                 }
             }
         }
