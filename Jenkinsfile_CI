@@ -17,11 +17,7 @@ pipeline {
             steps {
                 checkout scm
 
-                sh '''
-                sonar-scanner \
-                  -Dsonar.projectKey=front-end \
-                  -Dsonar.sources=. \
-                '''
+                
             }
         }
 
@@ -54,9 +50,9 @@ pipeline {
 
                 script {
                     sh "docker build -t ${DOCKER_IMAGE_NAME}:${env.BUILD_ID} ."
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
-                        sh "docker push ${DOCKER_IMAGE_NAME}:${env.BUILD_ID}"
-                    }
+                    // docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
+                    //     sh "docker push ${DOCKER_IMAGE_NAME}:${env.BUILD_ID}"
+                    // }
                 }
             }
         }
