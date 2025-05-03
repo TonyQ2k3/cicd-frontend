@@ -26,9 +26,6 @@ pipeline {
                     args '-u root:root'
                 }
             }
-            when {
-                changeset "**/src/**"
-            }
             steps {
                 checkout scm
                 sh 'npm ci'
@@ -36,23 +33,23 @@ pipeline {
             }
         }
 
-        // stage('Build Docker Image') {
-        //     agent {
-        //         docker { 
-        //             image 'docker:dind' 
-        //             args '-u root -v /var/run/docker.sock:/var/run/docker.sock'
-        //         }
-        //     }
-        //     steps {
-        //         checkout scm
+        stage('Build Docker Image') {
+            agent {
+                docker { 
+                    image 'docker:dind' 
+                    args '-u root -v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
+            steps {
+                checkout scm
 
-        //         script {
-        //             sh "git config --global --add safe.directory '${env.WORKSPACE}'"
-        //             def commitHash = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-        //             sh "docker build -t ${DOCKER_IMAGE}:test-${commitHash} ."
-        //         }
-        //     }
-        // }
+                script {
+                    sh "git config --global --add safe.directory '${env.WORKSPACE}'"
+                    def commitHash = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                    sh "docker build -t ${DOCKER_IMAGE}:test-${commitHash} ."
+                }
+            }
+        }
     }
 
     post {
